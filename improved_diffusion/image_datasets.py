@@ -4,6 +4,29 @@ from mpi4py import MPI
 import numpy as np
 from torch.utils.data import DataLoader, Dataset
 
+dict = {'A356': [0.32, 0.01, 0.00, 0.01, 0.01, 0.00],
+        'A360': [0.43, 0.01, 0.00, 0.00, 0.01, 0.00],
+        'A369': [0.52, 0.02, 0.01, 0.01, 0.01, 0.00],
+        'A339': [0.55, 0.03, 0.04, 0.01, 0.03, 0.02],
+        'A393': [1.00, 0.03, 0.02, 0.00, 0.03, 0.05],
+        'A355': [0.23, 0.01, 0.02, 0.01, 0.01, 0.00],
+        'A308': [0.25, 0.02, 0.09, 0.01, 0.00, 0.00],
+        'A319': [0.27, 0.02, 0.08, 0.01, 0.01, 0.01],
+        'A332': [0.43, 0.02, 0.06, 0.01, 0.06, 0.01],
+        'SandTH3': [0.0016],
+        'SandTH1': [0.056],
+        'PermTH2': [0.32],
+        'PermTH1': [0.8],
+        'NM': [0],
+        'M': [1]}
+
+
+def _parseFileName(file_name):
+    parsedCode=[]
+    parsedCode.append( dict[file_name[:4]]      )
+    parsedCode.append( dict[file_name[4:11]]    )
+    parsedCode.append( dict[file_name[11:]]     )
+    return parsedCode
 
 def load_data(
     *, data_dir, batch_size, image_size, class_cond=False, deterministic=False
@@ -31,7 +54,7 @@ def load_data(
     if class_cond:
         # Assume classes are the first part of the filename,
         # before an underscore.
-        class_names = [bf.basename(path).split("_")[0] for path in all_files]
+        class_names = [_parseFileName( bf.basename(path).split("_")[0] ) for path in all_files]
         sorted_classes = {x: i for i, x in enumerate(sorted(set(class_names)))}
         classes = [sorted_classes[x] for x in class_names]
     dataset = ImageDataset(
