@@ -14,19 +14,25 @@ dict = {'A356': [0.32, 0.01, 0.00, 0.01, 0.01, 0.00],
         'A319': [0.27, 0.02, 0.08, 0.01, 0.01, 0.01],
         'A332': [0.43, 0.02, 0.06, 0.01, 0.06, 0.01],
         'SandTH3': [0.0016],
-        'SandTH1': [0.056],
-        'PermTH2': [0.32],
-        'PermTH1': [0.8],
+        'SandTH1': [0.0560],
+        'PermTH2': [0.3200],
+        'PermTH1': [0.8000],
         'NM': [0],
         'M': [1]}
 
 
 def _parseFileName(file_name):
-    parsedCode=[]
-    parsedCode.append( dict[file_name[:4]]      )
-    parsedCode.append( dict[file_name[4:11]]    )
-    parsedCode.append( dict[file_name[11:]]     )
-    return parsedCode
+
+    comp_list = dict[file_name[:4]]
+    comp_str = ''.join(str(x) for x in comp_list)
+    coolingRate_list = dict[file_name[4:11]]
+    coolingRate_str = ''.join(str(x) for x in coolingRate_list)
+    modification_list =  dict[file_name[11:]]
+    modificatin_str = ''.join(str(x) for x in modification_list)
+
+    parsedStr= comp_str + coolingRate_str + modificatin_str
+    
+    return parsedStr
 
 def load_data(
     *, data_dir, batch_size, image_size, class_cond=False, deterministic=False
